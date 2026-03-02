@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>OddsGuru — AI Sports Predictions Nigeria</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080A0F; --card: #10131A; --border: #1E2330;
+    --accent: #00C853; --gold: #FFD700; --red: #FF3D57;
+    --text: #E8EAED; --muted: #6B7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; padding-bottom: 100px; }
+  .hero { background: linear-gradient(160deg, #0a1a10 0%, #080A0F 60%); padding: 60px 20px 50px; text-align: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 500px; height: 400px; background: radial-gradient(ellipse, rgba(0,200,83,0.07) 0%, transparent 70%); pointer-events: none; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); padding: 5px 14px; border-radius: 20px; font-size: 0.65rem; letter-spacing: 3px; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 20px; }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 3.4rem; font-weight: 700; letter-spacing: 3px; color: #fff; line-height: 1; margin-bottom: 8px; }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub { font-size: 1rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; max-width: 320px; margin-left: auto; margin-right: auto; }
+  .hero-stats { display: flex; justify-content: center; gap: 28px; margin-bottom: 32px; }
+  .hs { text-align: center; }
+  .hs-val { font-family: 'Rajdhani', sans-serif; font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .hs-label { font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .cta-btn { display: block; width: 100%; max-width: 340px; margin: 0 auto; padding: 18px; background: var(--accent); color: #000; font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: 2px; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; box-shadow: 0 8px 30px rgba(0,200,83,0.3); transition: all 0.2s; }
+  .cta-btn:active { transform: scale(0.98); }
+  .cta-sub { font-size: 0.7rem; color: var(--muted); text-align: center; margin-top: 10px; }
+  .section { padding: 36px 20px; }
+  .sec-title { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 6px; color: #fff; }
+  .sec-sub { font-size: 0.8rem; color: var(--muted); text-align: center; margin-bottom: 24px; }
+  .pred-preview { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; position: relative; overflow: hidden; }
+  .pred-preview::after { content: '🔒 MEMBERS ONLY'; position: absolute; inset: 0; background: rgba(8,10,15,0.88); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; color: var(--gold); letter-spacing: 3px; border-radius: 14px; backdrop-filter: blur(3px); }
+  .pp-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .pp-league { font-size: 0.62rem; color: var(--muted); letter-spacing: 2px; }
+  .pp-conf { font-size: 0.58rem; padding: 2px 7px; border-radius: 5px; font-weight: 800; background: rgba(0,200,83,0.15); color: var(--accent); }
+  .pp-teams { display: flex; justify-content: space-between; align-items: center; }
+  .pp-team { font-size: 0.88rem; font-weight: 700; }
+  .pp-score { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+  .features { display: flex; flex-direction: column; gap: 12px; }
+  .feat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; align-items: flex-start; gap: 14px; }
+  .feat-icon { font-size: 1.6rem; flex-shrink: 0; }
+  .feat-title { font-size: 0.92rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+  .feat-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+  .pricing-card { background: var(--card); border: 2px solid var(--accent); border-radius: 18px; padding: 28px 20px; text-align: center; box-shadow: 0 0 40px rgba(0,200,83,0.12); position: relative; overflow: hidden; }
+  .pricing-card::before { content: '🔥 BEST VALUE'; position: absolute; top: 16px; right: -30px; background: var(--gold); color: #000; font-size: 0.58rem; font-weight: 800; padding: 5px 44px; transform: rotate(45deg); letter-spacing: 1px; }
+  .price-amount { font-family: 'Rajdhani', sans-serif; font-size: 3.5rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .price-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+  .price-save { display: inline-block; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); color: var(--gold); font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 1px; }
+  .price-features { list-style: none; margin-bottom: 24px; text-align: left; }
+  .price-features li { padding: 8px 0; font-size: 0.83rem; color: var(--text); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .price-features li:last-child { border-bottom: none; }
+  .check { color: var(--accent); font-size: 1rem; }
+  .testi { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 8px; }
+  .testi-text { font-size: 0.83rem; line-height: 1.6; color: var(--text); margin-bottom: 12px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-av { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 0.9rem; }
+  .testi-name { font-size: 0.8rem; font-weight: 700; color: #fff; }
+  .testi-loc { font-size: 0.65rem; color: var(--muted); }
+  .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; cursor: pointer; }
+  .faq-q { font-size: 0.86rem; font-weight: 600; color: #fff; display: flex; justify-content: space-between; gap: 10px; }
+  .faq-a { font-size: 0.78rem; color: var(--muted); line-height: 1.6; margin-top: 10px; display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-arrow { transition: transform 0.2s; flex-shrink: 0; }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .footer { background: var(--card); border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; }
+  .footer-logo { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .footer-logo span { color: var(--accent); }
+  .footer-text { font-size: 0.7rem; color: var(--muted); line-height: 1.9; }
+  .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(8,10,15,0.97); backdrop-filter: blur(20px); padding: 12px 20px 24px; border-top: 1px solid var(--border); z-index: 100; }
+  .sticky-cta button { width: 100%; padding: 16px; background: var(--accent); color: #000; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; border: none; border-radius: 12px; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 20px rgba(0,200,83,0.3); }
+  .sticky-price { font-size: 0.68rem; color: var(--muted); text-align: center; margin-top: 6px; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 200; align-items: flex-end; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #12141c; border-radius: 22px 22px 0 0; padding: 28px 20px 44px; width: 100%; max-width: 430px; animation: slideUp 0.3s ease; max-height: 92vh; overflow-y: auto; }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .modal-close { float: right; background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; margin-top: -4px; }
+  .modal-title { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .modal-sub { font-size: 0.76rem; color: var(--muted); margin-bottom: 22px; line-height: 1.5; }
+  .step { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #000; font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-title { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .step-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+  .bank-box { background: rgba(0,200,83,0.06); border: 2px solid rgba(0,200,83,0.25); border-radius: 14px; padding: 20px; margin: 16px 0; }
+  .bank-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .bank-logo { width: 40px; height: 40px; border-radius: 10px; background: #1a5c3a; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .bank-name { font-size: 0.78rem; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
+  .bank-type { font-size: 0.65rem; color: var(--muted); }
+  .bank-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .bank-row:last-child { border-bottom: none; }
+  .bank-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .bank-value { font-size: 0.95rem; font-weight: 700; color: #fff; }
+  .bank-num { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; letter-spacing: 3px; color: var(--accent); }
+  .copy-btn { background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.2); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+  .amount-box { background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.2); border-radius: 10px; padding: 14px 16px; margin: 14px 0; display: flex; justify-content: space-between; align-items: center; }
+  .amount-label { font-size: 0.7rem; color: var(--muted); }
+  .amount-val { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+  .whatsapp-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: #25D366; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; border: none; border-radius: 12px; cursor: pointer; text-transform: uppercase; text-decoration: none; margin-top: 6px; box-shadow: 0 4px 20px rgba(37,211,102,0.3); }
+  .notice { background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.15); border-radius: 10px; padding: 12px 14px; margin-top: 14px; font-size: 0.74rem; color: var(--muted); line-height: 1.7; }
+  .notice strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="live-badge"><div class="live-dot"></div>AI POWERED • LIVE ODDS</div>
+  <h1>ODDS<span>GURU</span></h1>
+  <p class="hero-sub">Nigeria's most accurate AI sports prediction platform. Win more. Lose less.</p>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-val">71%</div><div class="hs-label">Win Rate</div></div>
+    <div class="hs"><div class="hs-val">8+</div><div class="hs-label">Sports</div></div>
+    <div class="hs"><div class="hs-val">Daily</div><div class="hs-label">Updates</div></div>
+  </div>
+  <button class="cta-btn" onclick="openModal()">START WINNING TODAY ⚡</button>
+  <p class="cta-sub">₦2,000 for 3 months • Pay via Opay • Instant access</p>
+</div>
+
+<div class="section">
+  <div class="sec-title">Today's Predictions</div>
+  <div class="sec-sub">Subscribe to unlock all predictions</div>
+  <div class="pred-preview"><div class="pp-top"><span class="pp-league">⚽ PREMIER LEAGUE</span><span class="pp-conf">HIGH</span></div><div class="pp-teams"><span class="pp-team">Arsenal</span><span class="pp-score">2.1 – 0.8</span><span class="pp-team">Brighton</span></div></div>
+  <div class="pred-preview"><div class="pp-top"><span class="pp-league">🏀 NBA</span><span class="pp-conf">HIGH</span></div><div class="pp-teams"><span class="pp-team">Cavaliers</span><span class="pp-score">118 – 104</span><span class="pp-team">Nets</span></div></div>
+  <div class="pred-preview"><div class="pp-top"><span class="pp-league">⚽ CHAMPIONS LEAGUE</span><span class="pp-conf">HIGH</span></div><div class="pp-teams"><span class="pp-team">Bayern</span><span class="pp-score">2.3 – 0.9</span><span class="pp-team">PSG</span></div></div>
+  <button class="cta-btn" style="margin-top:20px" onclick="openModal()">UNLOCK ALL PREDICTIONS 🔓</button>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="sec-title">Why OddsGuru?</div>
+  <div class="sec-sub">Built with real AI, not guesswork</div>
+  <div class="features">
+    <div class="feat"><div class="feat-icon">🤖</div><div><div class="feat-title">Real AI Predictions</div><div class="feat-desc">Our model analyses live odds from top bookmakers worldwide to calculate the most accurate win probabilities available.</div></div></div>
+    <div class="feat"><div class="feat-icon">⚽</div><div><div class="feat-title">8+ Sports Covered</div><div class="feat-desc">Premier League, La Liga, Serie A, Champions League, NBA, NFL, Bundesliga and more — updated every single day.</div></div></div>
+    <div class="feat"><div class="feat-icon">📊</div><div><div class="feat-title">Score Predictions</div><div class="feat-desc">Not just the winner — we predict exact scores, Over/Under lines and spreads for every match.</div></div></div>
+    <div class="feat"><div class="feat-icon">🎯</div><div><div class="feat-title">Confidence Ratings</div><div class="feat-desc">Every tip rated HIGH, MED or LOW confidence. Focus on HIGH confidence picks for the best results.</div></div></div>
+    <div class="feat"><div class="feat-icon">📱</div><div><div class="feat-title">Works on Any Phone</div><div class="feat-desc">No app download needed. Open your private link in Chrome. Works on all Android and iPhone devices.</div></div></div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="sec-title">Simple Pricing</div>
+  <div class="sec-sub">One plan. Everything included.</div>
+  <div class="pricing-card">
+    <div style="font-size:0.68rem;color:var(--muted);letter-spacing:2px;margin-bottom:8px">PRO MEMBER</div>
+    <div class="price-amount">₦2,000</div>
+    <div class="price-period">for 3 months full access</div>
+    <div class="price-save">💰 Only ₦667 per month!</div>
+    <ul class="price-features">
+      <li><span class="check">✓</span> All sports predictions every day</li>
+      <li><span class="check">✓</span> Score predictions included</li>
+      <li><span class="check">✓</span> Over/Under & spread lines</li>
+      <li><span class="check">✓</span> HIGH/MED/LOW confidence ratings</li>
+      <li><span class="check">✓</span> Updated daily automatically</li>
+      <li><span class="check">✓</span> Works on any phone browser</li>
+      <li><span class="check">✓</span> WhatsApp support included</li>
+    </ul>
+    <button class="cta-btn" onclick="openModal()">GET 3 MONTHS ACCESS ⚡</button>
+    <p class="cta-sub" style="margin-top:10px">Pay via Opay • Get access within minutes</p>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="sec-title">What Members Say</div>
+  <div class="sec-sub">Real results from real Nigerians</div>
+  <div class="testi"><div class="stars">★★★★★</div><div class="testi-text">"I have been using OddsGuru for 2 months and my winnings have increased seriously. The HIGH confidence tips are almost always correct. Best money I have ever spent!"</div><div class="testi-author"><div class="testi-av">C</div><div><div class="testi-name">Chukwuemeka O.</div><div class="testi-loc">Lagos, Nigeria</div></div></div></div>
+  <div class="testi"><div class="stars">★★★★★</div><div class="testi-text">"Finally a prediction app that uses real AI and not just guessing. I won 6 out of 8 bets last weekend following OddsGuru. The score predictions are very accurate!"</div><div class="testi-author"><div class="testi-av">A</div><div><div class="testi-name">Adebayo K.</div><div class="testi-loc">Abuja, Nigeria</div></div></div></div>
+  <div class="testi"><div class="stars">★★★★☆</div><div class="testi-text">"Premier League, NBA, Champions League all in one place. At ₦2,000 for 3 months this is the cheapest and most accurate prediction service in Nigeria. Very good!"</div><div class="testi-author"><div class="testi-av">I</div><div><div class="testi-name">Ibrahim M.</div><div class="testi-loc">Kano, Nigeria</div></div></div></div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="sec-title">Common Questions</div>
+  <div class="sec-sub">Everything you need to know</div>
+  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How do I get access after paying? <span class="faq-arrow">▼</span></div><div class="faq-a">Transfer ₦2,000 to our Opay account, screenshot your receipt and send it to our WhatsApp. We will reply within minutes with your private members link for 3 months access.</div></div>
+  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">How accurate are the predictions? <span class="faq-arrow">▼</span></div><div class="faq-a">Our AI model achieves 65-71% accuracy on HIGH confidence predictions. No service is 100% accurate — always bet responsibly and within your means.</div></div>
+  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Which sports are covered? <span class="faq-arrow">▼</span></div><div class="faq-a">Premier League, La Liga, Serie A, Bundesliga, Champions League, NBA, NFL and more. New sports added regularly.</div></div>
+  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">What if I have a problem? <span class="faq-arrow">▼</span></div><div class="faq-a">Send a WhatsApp message to our support number and we will respond quickly. We are available 7 days a week.</div></div>
+  <div class="faq-item" onclick="this.classList.toggle('open')"><div class="faq-q">Is the Opay transfer safe? <span class="faq-arrow">▼</span></div><div class="faq-a">Yes. You transfer directly from your Opay or any bank app to our verified Opay account. It is completely safe and instant — same as any normal bank transfer.</div></div>
+</div>
+
+<div class="footer">
+  <div class="footer-logo">ODDS<span>GURU</span></div>
+  <div class="footer-text">Nigeria's AI Sports Prediction Platform<br>WhatsApp Support: +2349038272133<br><br>⚠️ For 18+ only. Please gamble responsibly.<br>Predictions are for informational purposes only.</div>
+</div>
+
+<div class="sticky-cta">
+  <button onclick="openModal()">⚡ GET 3 MONTHS ACCESS — ₦2,000</button>
+  <div class="sticky-price">Pay via Opay • Send screenshot to WhatsApp • Instant access</div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Join OddsGuru Pro 🏆</div>
+    <div class="modal-sub">3 simple steps to get instant access to all predictions</div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Transfer ₦2,000 via Opay</div>
+        <div class="step-desc">Send exactly ₦2,000 to the account below using Opay, any bank app, or USSD transfer.</div>
+      </div>
+    </div>
+
+    <div class="bank-box">
+      <div class="bank-header">
+        <div class="bank-logo">💚</div>
+        <div><div class="bank-name">OPAY</div><div class="bank-type">Mobile Money</div></div>
+      </div>
+      <div class="bank-row">
+        <div class="bank-label">Account Number</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="bank-num" id="acc-num">9038272133</div>
+          <button class="copy-btn" onclick="copyAcc()">COPY</button>
+        </div>
+      </div>
+      <div class="bank-row">
+        <div class="bank-label">Account Name</div>
+        <div class="bank-value">Gladtidings Chimenum</div>
+      </div>
+      <div class="bank-row">
+        <div class="bank-label">Bank</div>
+        <div class="bank-value">Opay</div>
+      </div>
+    </div>
+
+    <div class="amount-box">
+      <div class="amount-label">Exact amount to send</div>
+      <div class="amount-val">₦2,000</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Screenshot your receipt</div>
+        <div class="step-desc">After the transfer completes, take a screenshot of your payment receipt.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Send receipt on WhatsApp</div>
+        <div class="step-desc">Tap the button below to open WhatsApp. Send your payment screenshot and we will send your members link within minutes!</div>
+      </div>
+    </div>
+
+    <a class="whatsapp-btn" href="https://wa.me/2349038272133?text=Hello%20OddsGuru!%20I%20just%20transferred%20%E2%82%A62%2C000%20for%203%20months%20access.%20Please%20find%20my%20payment%20receipt%20attached.%20Thank%20you!" target="_blank">
+      📲 SEND RECEIPT ON WHATSAPP
+    </a>
+
+    <div class="notice">
+      <strong>⏱️ Response time:</strong> We typically respond within 5–15 minutes. Your private members link will be sent to your WhatsApp as soon as payment is confirmed.<br><br>
+      <strong>📞 Support:</strong> +2349038272133
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function copyAcc() {
+    const num = document.getElementById('acc-num').textContent;
+    navigator.clipboard && navigator.clipboard.writeText(num).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      const orig = btn.textContent;
+      btn.textContent = 'COPIED ✓';
+      btn.style.background = 'rgba(0,200,83,0.3)';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
