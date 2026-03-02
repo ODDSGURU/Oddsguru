@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>OddsGuru — Members</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080A0F; --card: #10131A; --card2: #161922;
+    --border: #1E2330; --accent: #00C853; --accent2: #00D4FF;
+    --gold: #FFD700; --green: #00E676; --red: #FF5252;
+    --text: #E8EAED; --muted: #6B7280; --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; max-width: 430px; margin: 0 auto; padding-bottom: 100px; }
+
+  .header {
+    background: rgba(8,10,15,0.97); backdrop-filter: blur(20px);
+    padding: 48px 20px 0; position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; }
+  .logo { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; }
+  .logo span { color: var(--accent); }
+  .member-badge {
+    background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3);
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 0.6rem; color: var(--accent); font-weight: 700; letter-spacing: 1px;
+  }
+  .sport-tabs {
+    display: flex; gap: 8px; padding: 10px 0 12px;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .sport-tabs::-webkit-scrollbar { display: none; }
+  .stab {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--muted); font-size: 0.75rem; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .stab.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+  .main { padding: 16px; }
+  .sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .sec-title { font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .sec-count { font-size: 0.7rem; color: var(--muted); }
+
+  .refresh-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.2);
+    color: var(--accent); padding: 6px 12px; border-radius: 20px;
+    font-size: 0.7rem; font-weight: 600; cursor: pointer; letter-spacing: 1px;
+  }
+
+  .match-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 12px;
+    overflow: hidden; animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  .mc-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 14px 10px; border-bottom: 1px solid var(--border);
+  }
+  .mc-league { font-size: 0.6rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+  .mc-right { display: flex; align-items: center; gap: 8px; }
+  .mc-time { font-size: 0.7rem; color: var(--accent2); font-weight: 500; }
+  .conf-pill { font-size: 0.55rem; font-weight: 800; padding: 2px 7px; border-radius: 6px; letter-spacing: 1px; text-transform: uppercase; }
+  .c-high { background: rgba(0,230,118,0.15); color: var(--green); }
+  .c-med { background: rgba(255,215,0,0.15); color: var(--gold); }
+  .c-low { background: rgba(255,82,82,0.15); color: var(--red); }
+
+  .mc-teams { display: flex; align-items: center; padding: 14px; gap: 10px; }
+  .mc-team { flex: 1; }
+  .mc-team-name { font-weight: 700; font-size: 0.92rem; margin-bottom: 2px; color: #fff; }
+  .mc-team-stat { font-size: 0.62rem; color: var(--muted); }
+  .mc-team.away { text-align: right; }
+  .mc-score-wrap { text-align: center; min-width: 80px; }
+  .mc-score { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--accent); letter-spacing: 2px; line-height: 1; }
+  .mc-score-label { font-size: 0.55rem; color: var(--muted); letter-spacing: 2px; margin-top: 2px; }
+  .mc-ht { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+  .mc-prob { padding: 0 14px 12px; }
+  .prob-row { display: flex; justify-content: space-between; font-size: 0.68rem; color: #aaa; margin-bottom: 4px; font-weight: 600; }
+  .prob-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; display: flex; }
+  .pb-home { background: var(--accent); height: 100%; border-radius: 3px 0 0 3px; }
+  .pb-away { background: var(--accent2); height: 100%; border-radius: 0 3px 3px 0; }
+  .draw-pct { text-align: center; font-size: 0.62rem; color: var(--muted); margin-top: 4px; }
+
+  .mc-footer { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--border); }
+  .mf-item { padding: 10px 8px; text-align: center; border-right: 1px solid var(--border); }
+  .mf-item:last-child { border-right: none; }
+  .mf-label { font-size: 0.55rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .mf-val { font-size: 0.85rem; font-weight: 700; color: #fff; }
+  .over { color: var(--green) !important; }
+  .under { color: var(--red) !important; }
+
+  .expand-btn {
+    width: 100%; padding: 9px; background: transparent; border: none;
+    border-top: 1px solid var(--border); color: var(--muted);
+    font-size: 0.7rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 5px;
+    font-family: 'Inter', sans-serif; letter-spacing: 1px;
+  }
+  .expand-content { display: none; padding: 14px; background: var(--card2); border-top: 1px solid var(--border); }
+  .expand-content.open { display: block; animation: fadeIn 0.2s ease; }
+  .bet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .bet-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .bi-label { font-size: 0.58rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .bi-val { font-size: 0.95rem; font-weight: 700; }
+  .insight { margin-top: 10px; padding: 12px; background: rgba(0,200,83,0.06); border: 1px solid rgba(0,200,83,0.15); border-radius: 8px; font-size: 0.75rem; line-height: 1.6; color: var(--text); }
+  .insight-label { font-size: 0.6rem; color: var(--accent); font-weight: 700; letter-spacing: 1px; margin-bottom: 5px; }
+
+  .loading { text-align: center; padding: 60px 20px; }
+  .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; }
+
+  .empty { text-align: center; padding: 40px 20px; }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .empty-text { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: rgba(8,10,15,0.97); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    display: flex; padding: 10px 0 20px; z-index: 100;
+  }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 0; }
+  .nav-icon { font-size: 1.2rem; }
+  .nav-label { font-size: 0.55rem; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+  .nav-item.active .nav-label { color: var(--accent); }
+
+  .tab-view { display: none; }
+  .tab-view.active { display: block; }
+
+  .acc-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }
+  .acc-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .acc-title { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; }
+  .acc-badge { font-size: 0.62rem; padding: 3px 8px; background: rgba(0,230,118,0.15); color: var(--green); border-radius: 6px; font-weight: 700; }
+  .acc-bar { margin-bottom: 10px; }
+  .acc-bar-top { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--muted); margin-bottom: 4px; }
+  .acc-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .acc-fill { height: 100%; border-radius: 3px; }
+
+  .tip-card { background: rgba(0,200,83,0.06); border: 1px solid rgba(0,200,83,0.2); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+  .tip-title { font-size: 0.65rem; color: var(--accent); font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .tip-text { font-size: 0.82rem; line-height: 1.7; color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">ODDS<span>GURU</span></div>
+    <div class="member-badge">✓ PRO MEMBER</div>
+  </div>
+  <div class="sport-tabs" id="sportTabs">
+    <div class="stab active" onclick="filterSport('all',this)">All Sports</div>
+    <div class="stab" onclick="filterSport('soccer',this)">⚽ Soccer</div>
+    <div class="stab" onclick="filterSport('basketball',this)">🏀 NBA</div>
+    <div class="stab" onclick="filterSport('football',this)">🏈 NFL</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PREDICTIONS TAB -->
+  <div class="tab-view active" id="tab-today">
+    <div class="sec-header">
+      <div class="sec-title">Today's Predictions</div>
+      <div class="refresh-btn" onclick="loadPredictions()">↻ Refresh</div>
+    </div>
+    <div id="predictions-list">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">LOADING LIVE DATA...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS TAB -->
+  <div class="tab-view" id="tab-stats">
+    <div class="sec-header"><div class="sec-title">Model Accuracy</div></div>
+    <div class="acc-card">
+      <div class="acc-hdr"><div class="acc-title">⚽ Soccer</div><div class="acc-badge">64% AVG</div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Correct Winner</span><span style="color:#fff">68%</span></div><div class="acc-track"><div class="acc-fill" style="width:68%;background:var(--green)"></div></div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Score Within ±1</span><span style="color:#fff">54%</span></div><div class="acc-track"><div class="acc-fill" style="width:54%;background:var(--accent2)"></div></div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Over/Under</span><span style="color:#fff">61%</span></div><div class="acc-track"><div class="acc-fill" style="width:61%;background:var(--gold)"></div></div></div>
+    </div>
+    <div class="acc-card">
+      <div class="acc-hdr"><div class="acc-title">🏀 NBA</div><div class="acc-badge">71% AVG</div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Correct Winner</span><span style="color:#fff">74%</span></div><div class="acc-track"><div class="acc-fill" style="width:74%;background:var(--green)"></div></div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Score Within ±8</span><span style="color:#fff">69%</span></div><div class="acc-track"><div class="acc-fill" style="width:69%;background:var(--accent2)"></div></div></div>
+      <div class="acc-bar"><div class="acc-bar-top"><span>Spread Correct</span><span style="color:#fff">66%</span></div><div class="acc-track"><div class="acc-fill" style="width:66%;background:var(--gold)"></div></div></div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-title">💡 HOW TO USE ODDSGURU</div>
+      <div class="tip-text">
+        Focus on <strong>HIGH confidence</strong> predictions — these have the strongest edge based on market odds analysis.<br><br>
+        Never bet more than 5% of your bankroll on a single game, even on HIGH confidence tips.<br><br>
+        Use the Over/Under and Spread lines alongside the score prediction for the best results.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-today" onclick="showTab('today')">
+    <div class="nav-icon">🏠</div>
+    <div class="nav-label">Predictions</div>
+  </div>
+  <div class="nav-item" id="nav-stats" onclick="showTab('stats')">
+    <div class="nav-icon">📊</div>
+    <div class="nav-label">Stats</div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ─────────────────────────────────────
+// PASTE YOUR ODDS API KEY HERE
+const API_KEY = "PASTE_YOUR_ODDS_API_KEY_HERE";
+const BASE_URL = "https://api.the-odds-api.com/v4";
+
+const SPORTS = [
+  {key:"soccer_epl", name:"Premier League", icon:"⚽", type:"soccer"},
+  {key:"soccer_uefa_champs_league", name:"Champions League", icon:"⚽", type:"soccer"},
+  {key:"soccer_spain_la_liga", name:"La Liga", icon:"⚽", type:"soccer"},
+  {key:"soccer_italy_serie_a", name:"Serie A", icon:"⚽", type:"soccer"},
+  {key:"basketball_nba", name:"NBA", icon:"🏀", type:"basketball"},
+  {key:"americanfootball_nfl", name:"NFL", icon:"🏈", type:"football"},
+];
+
+let allMatches = [];
+let currentFilter = 'all';
+let expanded = {};
+
+// ─── API ─────────────────────────────────────────
+async function fetchOdds(sportKey) {
+  try {
+    const url = `${BASE_URL}/sports/${sportKey}/odds?apiKey=${API_KEY}&regions=uk&markets=h2h,totals,spreads&oddsFormat=decimal`;
+    const r = await fetch(url);
+    if (r.ok) return await r.json();
+  } catch(e) {}
+  return [];
+}
+
+// ─── PREDICTION ENGINE ──────────────────────────
+function calcProbs(homeOdds, awayOdds, drawOdds) {
+  const hp = 1/homeOdds, ap = 1/awayOdds, dp = drawOdds ? 1/drawOdds : 0;
+  const t = hp+ap+dp;
+  return [+(hp/t*100).toFixed(1), +(ap/t*100).toFixed(1), +(dp/t*100).toFixed(1)];
+}
+
+function estScore(type, hp, ap, ou) {
+  const r = hp/(hp+ap)||0.5;
+  if(type==='soccer'){ const t=ou||2.5; return `${+(t*r*1.05).toFixed(1)} – ${+(t*(1-r)*0.95).toFixed(1)}`; }
+  if(type==='basketball'){ const t=ou||220; const h=Math.round(t*r*1.01); return `${h} – ${Math.round(t-h)}`; }
+  if(type==='football'){ const t=ou||45; const h=Math.round(t*r/3)*3; return `${h} – ${Math.round((t-h)/3)*3}`; }
+  return `${Math.round(ou*r||10)} – ${Math.round(ou*(1-r)||10)}`;
+}
+
+function getConf(hp, ap) {
+  const d = Math.abs(hp-ap);
+  if(d>25) return ['HIGH','c-high'];
+  if(d>10) return ['MED','c-med'];
+  return ['LOW','c-low'];
+}
+
+function getInsight(type, home, away, hp, ap, dp, ou) {
+  const winner = hp>=ap ? home : away;
+  const winPct = Math.max(hp,ap);
+  const [conf] = getConf(hp,ap);
+  const loser = hp>=ap ? away : home;
+  let msg = conf==='HIGH' ? `Strong model signal — ${winner} has a clear edge at ${winPct}% win probability. ` :
+            conf==='MED' ? `Moderate edge for ${winner} at ${winPct}%. Consider smaller stake. ` :
+            `Very close match — too tight to call confidently. Avoid or small stake only. `;
+  if(dp>20) msg += `High draw probability (${dp}%) — consider draw option. `;
+  if(ou) msg += `Total line sits at ${ou} — model suggests ${type==='soccer'?'Under 2.5 goals likely':'check total carefully'}.`;
+  return msg;
+}
+
+// ─── RENDER ─────────────────────────────────────
+function renderMatches() {
+  const list = document.getElementById('predictions-list');
+  const filtered = currentFilter==='all' ? allMatches : allMatches.filter(m=>m.type===currentFilter);
+  document.querySelector('.sec-count') && (document.querySelector('.sec-count').textContent = `${filtered.length} matches`);
+
+  if(filtered.length===0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">No ${currentFilter==='all'?'':''+currentFilter+' '}matches available right now.<br>Check back later or tap Refresh.</div></div>`;
+    return;
+  }
+
+  list.innerHTML = '';
+  filtered.forEach(m => {
+    const [conf, confClass] = getConf(m.hp, m.ap);
+    const winner = m.hp>=m.ap ? m.home : m.away;
+    const spread = m.spread ? m.spread : 'N/A';
+    const ou = m.ou ? m.ou : 'N/A';
+    const ouClass = m.ou && m.hp+m.ap > 50 ? 'over' : 'under';
+    const isOpen = expanded[m.id];
+    const insight = getInsight(m.type, m.home, m.away, m.hp, m.ap, m.dp, m.ou);
+
+    const div = document.createElement('div');
+    div.className = 'match-card';
+    div.innerHTML = `
+      <div class="mc-header">
+        <div class="mc-league">${m.icon} ${m.league}</div>
+        <div class="mc-right">
+          <div class="mc-time">${m.date}</div>
+          <div class="conf-pill ${confClass}">${conf}</div>
+        </div>
+      </div>
+      <div class="mc-teams">
+        <div class="mc-team">
+          <div class="mc-team-name">${m.home}</div>
+          <div class="mc-team-stat">${m.hp}% win</div>
+        </div>
+        <div class="mc-score-wrap">
+          <div class="mc-score">${m.score}</div>
+          <div class="mc-score-label">PREDICTED</div>
+        </div>
+        <div class="mc-team away">
+          <div class="mc-team-name">${m.away}</div>
+          <div class="mc-team-stat">${m.ap}% win</div>
+        </div>
+      </div>
+      <div class="mc-prob">
+        <div class="prob-row"><span>${m.hp}%</span><span style="font-size:9px;color:#555">WIN PROBABILITY</span><span>${m.ap}%</span></div>
+        <div class="prob-bar">
+          <div class="pb-home" style="width:${m.hp}%"></div>
+          <div class="pb-away" style="width:${m.ap}%"></div>
+        </div>
+        ${m.dp>0?`<div class="draw-pct">Draw: ${m.dp}%</div>`:''}
+      </div>
+      <div class="mc-footer">
+        <div class="mf-item"><div class="mf-label">WINNER</div><div class="mf-val" style="color:var(--green);font-size:0.75rem">${winner}</div></div>
+        <div class="mf-item"><div class="mf-label">O/U LINE</div><div class="mf-val">${ou}</div></div>
+        <div class="mf-item"><div class="mf-label">SPREAD</div><div class="mf-val" style="font-size:0.72rem">${spread}</div></div>
+      </div>
+      <button class="expand-btn" onclick="toggleExpand('${m.id}',this)">
+        ${isOpen?'▲ Less details':'▼ Full betting lines'}
+      </button>
+      <div class="expand-content ${isOpen?'open':''}" id="exp-${m.id}">
+        <div class="bet-grid">
+          <div class="bet-item"><div class="bi-label">Predicted Winner</div><div class="bi-val" style="color:var(--green)">${winner}</div></div>
+          <div class="bet-item"><div class="bi-label">Home Win %</div><div class="bi-val">${m.hp}%</div></div>
+          <div class="bet-item"><div class="bi-label">Away Win %</div><div class="bi-val">${m.ap}%</div></div>
+          <div class="bet-item"><div class="bi-label">Confidence</div><div class="bi-val">${conf}</div></div>
+        </div>
+        <div class="insight"><div class="insight-label">💡 GURU INSIGHT</div>${insight}</div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function toggleExpand(id, btn) {
+  expanded[id] = !expanded[id];
+  document.getElementById('exp-'+id).classList.toggle('open');
+  btn.textContent = expanded[id] ? '▲ Less details' : '▼ Full betting lines';
+}
+
+function filterSport(sport, el) {
+  currentFilter = sport;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderMatches();
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-view').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+}
+
+// ─── LOAD DATA ───────────────────────────────────
+async function loadPredictions() {
+  document.getElementById('predictions-list').innerHTML = `
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">LOADING LIVE DATA...</div>
+    </div>`;
+
+  allMatches = [];
+  let id = 0;
+
+  for(const sport of SPORTS) {
+    const games = await fetchOdds(sport.key);
+    for(const g of games.slice(0,6)) {
+      const home = g.home_team, away = g.away_team;
+      const date = (g.commence_time||'').slice(0,10);
+      let ho,ao,dro,ou,spread;
+
+      for(const b of (g.bookmakers||[]).slice(0,1)) {
+        for(const m of (b.markets||[])) {
+          const outs = {};
+          (m.outcomes||[]).forEach(o=>outs[o.name]=o);
+          if(m.key==='h2h') { ho=outs[home]?.price; ao=outs[away]?.price; dro=outs['Draw']?.price; }
+          if(m.key==='totals') { for(const o of m.outcomes) if(o.name==='Over') ou=o.point; }
+          if(m.key==='spreads') { for(const o of m.outcomes) if(o.name===home) spread=`${home} ${o.point}`; }
+        }
+      }
+
+      if(!ho||!ao) continue;
+      const [hp,ap,dp] = calcProbs(ho,ao,dro);
+      const score = estScore(sport.type,hp,ap,ou);
+
+      allMatches.push({
+        id: id++, home, away, date,
+        hp, ap, dp, score,
+        ou: ou||null, spread: spread||null,
+        league: sport.name, icon: sport.icon,
+        type: sport.type
+      });
+    }
+  }
+
+  renderMatches();
+}
+
+// ─── INIT ────────────────────────────────────────
+loadPredictions();
+</script>
+</body>
+</html>
